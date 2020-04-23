@@ -1,0 +1,72 @@
+﻿
+@{
+    ViewData["Title"] = "Courses";
+}
+
+<h1>Courses</h1>
+<!-- <p><a href="/Home/CreateCourse">Create New Course</a></p> -->
+<form method="get" action="">
+    <p>
+        Title: <input type="text" id="coursetitle" name="coursetitle" value="" />
+        Semester: <input type="text" id="coursesemester" name="coursesemester" value="" />
+        Programe: <input type="text" id="courseprogramme" name="courseprogramme" value="" />
+        <input type="submit" value="Filter" />
+    </p>
+</form>
+
+<table class="table" id="coursesTable">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Credits</th>
+            <th>Semester</th>
+            <th>Programme</th>
+            <th>Education Level</th>
+            <th>First Teacher</th>
+            <th>Second Teacher</th>
+            <th></th>
+        </tr>
+    </thead>
+</table>
+<hr />
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            coursetitle = getQueryVariable('coursetitle');
+            coursesemester = getQueryVariable('coursesemester');
+            courseprogramme = getQueryVariable('courseprogramme');
+            $("#coursetitle").val(coursetitle).trigger("change");
+            $("#coursesemester").val(coursesemester).trigger("change");
+            $("#courseprogramme").val(courseprogramme).trigger("change");
+            fillTable(coursetitle, coursesemester, courseprogramme)
+
+        });
+        function getQueryVariable(variable) {
+            var query = window.location.search.substring(1);
+            var vars = query.split('&');
+            for (var i = 0; i < vars.length; i++) {
+                var pair = vars[i].split('=');
+                if (decodeURIComponent(pair[0]) == variable) { return decodeURIComponent(pair[1]); }
+            }
+        }
+        var fillTable = function (coursetitle = "", coursesemester = "", courseprogramme = "") {
+            $.ajax({
+                type: "GET",
+                url: "/api/CoursesApi?coursetitle=" + coursetitle + "&coursesemester=" + coursesemester + "&courseprogramme" + courseprogramme,
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    $(data).each(function () {
+
+
+                        
+                    })
+                }
+            })
+        }
+    </script>
+
+}
